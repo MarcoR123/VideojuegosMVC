@@ -1,8 +1,22 @@
-<h1>Videojuegos:</h1>
+<%= turbo_frame_tag 'home' do %>
+  <h2><%= t('.titulo') %></h2>
 
-<% @products.each do |product| %>
-    <%= link_to product_path(product), class: 'product' do %>
-        <h2><%= product.title %></h2>
-        <span><%= product.price %>$</span>
-    <% end %>
+ <%= form_with url: products_path, method: :get do |form| %>
+   <%= form.text_field :query_text, placeholder: ('Busqueda por texto'), onChange: 'this.form.requestSubmit()', value: params[:query_text] %>
+
+    <%= form.number_field :min_price, placeholder: ('Precio minimo'), onChange: 'this.form.requestSubmit()', value: params[:min_price] %>
+    
+    <%= form.number_field :max_price, placeholder: ('Precio maximo'),onChange: 'this.form.requestSubmit()', value: params[:max_price] %>
+
+    <%= form.select :order_by, options_for_select(Product::ORDER_BY.keys.map { |order| [t(".#{order}"), order] }, params[:order_by]), {}, { onChange: 'this.form.requestSubmit()' } %>
+  <% end %>
+
+  <%= link_to t('.Todas'), products_path %>
+  <%= render partial: 'category', collection: @categories %>
+
+  <%= turbo_frame_tag "products-#{@pagy.page}", class: 'products' do %>
+    <%= render partial: 'product', collection: @products %>
+    <%= turbo_frame_tag "products-#{@pagy.next}", class: 'products', src: pagy_url_for(@pagy, @pagy.next), loading: :lazy if @pagy.next %>
+  <% end %>
+
 <% end %>
