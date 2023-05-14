@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+FIFA:
+  title: FIFA 15
+  description: Videojuego de futbol año 2015
+  price: 20
+
+GTA:
+  title: GTAV
+  description: Juego de mundo abierto en los Santos 
+  price: 50
